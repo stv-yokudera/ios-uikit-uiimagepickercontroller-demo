@@ -12,7 +12,7 @@ NSCoding
 | プロパティ名 | 説明 | サンプル |
 |-----------|------------|------------|
 | delegate | delegateを設定する | imagePicker.delegate |
-| sourceType | 画像取得先<br>（iOS10〜infoplistで許可文言の設定をする必要がある。<br>それがないとクラッシュする） | imagePicker.sourceType |
+| sourceType | 画像取得先<br>（iOS10〜info.plistで許可文言の設定をする必要がある。<br>それがないとクラッシュする） | imagePicker.sourceType |
 | allowsEditing | 画像取得後の編集を許可するかどうか | imagePicker.allowsEditing |
 
 ## 主要メソッド
