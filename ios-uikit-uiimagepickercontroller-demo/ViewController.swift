@@ -11,9 +11,20 @@ import UIKit
 final class ViewController: UIViewController {
 
     @IBOutlet fileprivate weak var imageView: UIImageView!
-    
-    @IBAction private func didTapButton(_ sender: UIButton) {
-        guard let imagePicker = setupImagePicker() else { return }
+}
+
+// MARK: - file private
+extension ViewController {
+    @IBAction func didTapCameraButton(_ sender: Any) {
+        guard let imagePicker = setupImagePicker(sourceType: .camera) else { return }
+        present(imagePicker, animated: true, completion: nil)
+    }
+    @IBAction func didTapPhotoLibraryButton(_ sender: Any) {
+        guard let imagePicker = setupImagePicker(sourceType: .photoLibrary) else { return }
+        present(imagePicker, animated: true, completion: nil)
+    }
+    @IBAction func didTapSavedPhotosAlbumButton(_ sender: Any) {
+        guard let imagePicker = setupImagePicker(sourceType: .savedPhotosAlbum) else { return }
         present(imagePicker, animated: true, completion: nil)
     }
 }
@@ -22,10 +33,17 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
     
     // MARK: - setup
     
-    fileprivate func setupImagePicker() -> UIImagePickerController? {
+    fileprivate func setupImagePicker(sourceType: UIImagePickerControllerSourceType) -> UIImagePickerController? {
         
-        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
-            print("この端末はphotoLibraryが使えません")
+        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+            switch sourceType {
+            case .camera:
+                print("この端末はcameraが使えません")
+            case .photoLibrary:
+                print("この端末はphotoLibraryが使えません")
+            case .savedPhotosAlbum:
+                print("この端末はsavedPhotosAlbumが使えません")
+            }
             return nil
         }
         
@@ -36,12 +54,11 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
         // 画像取得先を選択する
         /*
          ※注意
-         iOS10以降、写真にアクセスする際はinfo.plistにPrivacy - Photo Library Usage Descriptionを設定し、
-         写真にアクセスする旨の文言をセットする
+         iOS10以降、写真やカメラにアクセスする際にinfo.plistにPrivacy - ○○ Usage Descriptionを設定し、使用目的を明記する
          　↓
          上記設定をしないとクラッシュする
          */
-        imagePicker.sourceType = .photoLibrary
+        imagePicker.sourceType = sourceType
         
         // 画像取得後の編集を許可する
         imagePicker.allowsEditing = true
